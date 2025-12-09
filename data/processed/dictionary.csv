@@ -1,6 +1,1 @@
-variable_name,description
-Service_Type,
-Coverage,
-Population,
-Residence_Type,
-Service_Level,
+Service_Type,description,Coverage,description,Population,description,Residence_Type,description,Service_Level,description
