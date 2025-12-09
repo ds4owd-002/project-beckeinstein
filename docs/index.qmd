@@ -1,34 +1,19 @@
 ---
-title: "index.qmd"
+title: "Openwash Capstone Project"
 format: html
 editor: visual
 ---
 
-## Quarto
+## Project description
 
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+This data shows data from the year 2024 and describes the service levels of hygiene, sanitation and drinking water. It includes the population and services coverage. The goal is to represent this graphically
 
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
-```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
+## Import
 
 ```{r}
 library(tidyverse)
 ```
 
 ```{r}
-read_csv(here::here("data/raw/washdash data.xlsx"))
+read_csv(here::here("data/raw/OpenwashProjectData.xlsx"))
 ```
