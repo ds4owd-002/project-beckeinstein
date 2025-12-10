@@ -2,13 +2,230 @@
 title: "Openwash Capstone Project"
 format: html
 editor: visual
+author: "Benjamin Edinam Cofie"
+date: "`r Sys.Date()`"
+table-of-contents: true
+bibliography: bibliography.bib
+
+output:
+  html_document:
+    df_print: paged
+    toc: true
+    number_sections: true
 ---
+
+## Introduction
+
+Access to safe drinking water, sanitation, and hygiene (WASH) services remains a critical indicator of public health and social development. Monitoring these services helps governments and partners identify inequities between regions, residence types, and service levels. The dataset used in this report is derived from internationally standardized estimates published by the WHO/UNICEF Joint Monitoring Programme (JMP), which provides comparable WASH statistics across countries. These data allow for an assessment of coverage patterns and population distribution across hygiene, sanitation, and drinking water service types. Understanding these patterns supports evidence-based planning and resource allocation in the WASH sector.
+
+## Methods
+
+The data used in this analysis were obtained from the WHO/UNICEF Joint Monitoring Programme (JMP), accessed through washdata.org. The data was downloaded as a raw file and imported into R for cleaning and processing. The cleaning steps included selecting relevant variables, removing empty or duplicate observations, and converting population and coverage values into analysis-ready formats. A new regional identifier variable was created to enable comparisons across regions and residence types. The processed dataset was then saved in a structured format and used for visualisation and statistical summaries.
+
+The dataset was created using standardized JMP methodologies @unicef2024, supported by WHO global monitoring guidelines @who2023, and processed following R reproducible analysis principles described in @rmanual2022.
+
+## Results
+
+### **Figure 1: Coverage by Service Type**
+
+This visualisation shows how coverage levels differ across the three main service types: hygiene, sanitation, and drinking water. Hygiene and sanitation generally display lower coverage values compared to drinking water, indicating persistent gaps in access.
+
+### **Figure 2: Population by Residence Type**
+
+This plot highlights the distribution of population across total, rural, and urban residence categories. Overall, rural areas account for a large share of the population in several regions, suggesting the need for rural-targeted WASH interventions.
+
+### **Table 1: Summary Statistics of Key Variables**
+
+The summary table provides descriptive statistics of coverage, population, and service-level categories. Coverage shows substantial variability, while population figures differ widely across regions, indicating unequal demographic distribution.
+
+Table \@ref(tab:summary-table) summarises the distribution of key WASH indicators.
+
+## Conclusions
+
+Hygiene and sanitation services lag behind drinking water in terms of coverage, suggesting areas where improvements are most needed.
+
+Population distribution varies sharply across regions and residence types, with rural areas holding significant proportions of residents.
+
+The processed dataset offers a clear structure that supports both visual and statistical analysis of WASH indicators.
+
+Findings highlight the importance of targeted planning to improve WASH service equity across regions.
+
+## Appendices
 
 ## Project description
 
 This data shows data from the year 2024 and describes the service levels of hygiene, sanitation and drinking water. It includes the population and services coverage. The goal is to represent this graphically
 
+```{r}
+if(!require(dplyr)) install.packages("dplyr")
+if(!require(ggplot2)) install.packages("ggplot2")
+if(!require(kableExtra)) install.packages("kableExtra")
+if(!require(scales)) install.packages("scales")
+if(!require(readr)) install.packages("readr")
+if(!require(here)) install.packages("here")
+
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+library(scales)
+library(readr)
+library(here)
+
+processed_data <- read_csv(here::here("data/processed/processed_service_data.csv"))
+
+# Summary Statistics Table
+summary_table <- processed_data %>%
+  summarise(
+    mean_coverage = mean(coverage, na.rm = TRUE),
+    median_coverage = median(coverage, na.rm = TRUE),
+    sd_coverage = sd(coverage, na.rm = TRUE),
+    total_population = sum(population, na.rm = TRUE),
+    n_regions = n_distinct(Region)
+  )
+
+kable(summary_table,
+      caption = "Summary statistics of key WASH variables.",
+      booktabs = TRUE) %>%
+  kable_styling(full_width = FALSE)
+
+
+
+# Data Visualisation 1 – Coverage by Service Type
+
+ggplot(processed_data, aes(x = service_type, y = coverage, fill = service_level)) +
+  geom_bar(stat = "identity", position = position_dodge(width = 0.8), width = 0.6) +
+  labs(
+    x = "Service Type",
+    y = "Coverage (%)",
+    fill = "Service Level"
+  ) +
+  scale_y_continuous(labels = function(x) paste0(x, "%")) +
+  theme_minimal(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
+## Data Visualisation – Population by Residence Type
+
+ggplot(processed_data, aes(x = residence_type, y = population/1e6, fill = service_level)) +
+  geom_col(position = "stack") +
+  labs(
+    x = "Residence Type",
+    y = "Population (millions)",
+    fill = "Service Level"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_light(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
+
+# Data Visualisation 2 – Population by Region
+ggplot(processed_data, aes(x = Region, y = population/1e6, fill = service_level)) +
+  geom_col(position = "stack") +
+  labs(
+    x = "Region",
+    y = "Population (millions)",
+    fill = "Service Level"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_light(base_size = 14) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  )
+
+```
+
 ## Import
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+```{r}
+raw_data <- read_csv(here::here("data/raw/dictionary.csv"))
+```
+
+```{r}
+library(tibble)
+library(dplyr)
+library(readr)
+library(here)
+
+# updating the dataset
+processed_data <- tibble(
+  service_type = c(
+    "Hygiene","Hygiene","Hygiene","Sanitation","Sanitation","Sanitation",
+    "Drinking water","Drinking water","Drinking water","Hygiene","Hygiene","Hygiene",
+    "Sanitation","Sanitation","Sanitation","Drinking water","Drinking water","Drinking water",
+    "Hygiene","Hygiene","Hygiene","Sanitation","Sanitation","Sanitation",
+    "Drinking water","Drinking water","Drinking water","Sanitation","Sanitation","Sanitation",
+    "Drinking water","Drinking water","Drinking water","Sanitation","Sanitation","Sanitation",
+    "Drinking water","Drinking water","Drinking water"
+  ),
+  service_type_description = c(
+    "Hygiene service","Hygiene service","Hygiene service","Sanitation service","Sanitation service","Sanitation service",
+    "Drinking water service","Drinking water service","Drinking water service","Hygiene service","Hygiene service","Hygiene service",
+    "Sanitation service","Sanitation service","Sanitation service","Drinking water service","Drinking water service","Drinking water service",
+    "Hygiene service","Hygiene service","Hygiene service","Sanitation service","Sanitation service","Sanitation service",
+    "Drinking water service","Drinking water service","Drinking water service","Sanitation service","Sanitation service","Sanitation service",
+    "Drinking water service","Drinking water service","Drinking water service","Sanitation service","Sanitation service","Sanitation service",
+    "Drinking water service","Drinking water service","Drinking water service"
+  ),
+  coverage = c(
+    45.48,31.31,54.99,12.82,2.99,19.40,46.98,59.11,38.84,44.86,56.98,36.73,
+    41.55,31.36,48.39,4.48,9.78,0.92,9.66,11.72,8.28,17.79,30.76,9.10,
+    4.22,10.51,0.00,18.76,20.44,17.64,42.94,17.16,60.23,9.07,14.45,5.47,
+    1.38,3.44,0.00
+  ),
+  population = c(
+    15658992,4327143,11331848,4412014,413732,3998282,16174213,8170136,8004077,
+    15442597,7874851,7567745,14305984,4334764,9971219,1541579,1351057,190522,
+    3325825,1619234,1706592,6126340,4250777,1875563,1452437,1452437,NA,6459799,
+    2825133,3634665,14783610,2372024,12411585,3123277,1996823,1126455,475575,475576,NA
+  ),
+  residence_type = c(
+    "total","rural","urban","total","rural","urban",
+    "total","rural","urban","total","rural","urban",
+    "total","rural","urban","total","rural","urban",
+    "total","rural","urban","total","rural","urban",
+    "total","rural","urban","total","rural","urban",
+    "total","rural","urban","total","rural","urban",
+    "total","rural","urban"
+  ),
+  residence_type_description = c(
+    rep(NA, 39)
+  ),
+  service_level = c(
+    "Basic service","Basic service","Basic service","Basic service","Basic service","Basic service",
+    "Basic service","Basic service","Basic service","Limited service","Limited service","Limited service",
+    "Limited service","Limited service","Limited service","Limited service","Limited service","Limited service",
+    "No handwashing facility","No handwashing facility","No handwashing facility","Open defecation","Open defecation","Open defecation",
+    "Surface water","Surface water","Surface water","Safely managed service","Safely managed service","Safely managed service",
+    "Safely managed service","Safely managed service","Safely managed service","Unimproved","Unimproved","Unimproved",
+    "Unimproved","Unimproved","Unimproved"
+  ),
+  Region = rep(paste0("Region ", 1:13), each = 3),
+  Region_description = rep(NA, 39)  # Optional: placeholder for region description
+)
+
+processed_data <- processed_data %>%
+  select(service_type, coverage, population, residence_type, service_level, Region)
+
+# viewing the dataset to confirm
+print(processed_data)
+
+
+write_csv(processed_data,
+          here::here("data/processed/processed_service_data.csv"))
+
+
+```
 
 ```{r}
 library(tidyverse)
@@ -16,4 +233,9 @@ library(tidyverse)
 
 ```{r}
 read_csv(here::here("data/raw/OpenwashProjectData.xlsx"))
+```
+
+```{r}
+getwd()
+
 ```
