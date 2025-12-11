@@ -1,0 +1,40 @@
+service_type,coverage,population,residence_type,service_level,Region
+Hygiene,45.48,15658992,total,Basic service,Region 1
+Hygiene,31.31,4327143,rural,Basic service,Region 1
+Hygiene,54.99,11331848,urban,Basic service,Region 1
+Sanitation,12.82,4412014,total,Basic service,Region 2
+Sanitation,2.99,413732,rural,Basic service,Region 2
+Sanitation,19.4,3998282,urban,Basic service,Region 2
+Drinking water,46.98,16174213,total,Basic service,Region 3
+Drinking water,59.11,8170136,rural,Basic service,Region 3
+Drinking water,38.84,8004077,urban,Basic service,Region 3
+Hygiene,44.86,15442597,total,Limited service,Region 4
+Hygiene,56.98,7874851,rural,Limited service,Region 4
+Hygiene,36.73,7567745,urban,Limited service,Region 4
+Sanitation,41.55,14305984,total,Limited service,Region 5
+Sanitation,31.36,4334764,rural,Limited service,Region 5
+Sanitation,48.39,9971219,urban,Limited service,Region 5
+Drinking water,4.48,1541579,total,Limited service,Region 6
+Drinking water,9.78,1351057,rural,Limited service,Region 6
+Drinking water,0.92,190522,urban,Limited service,Region 6
+Hygiene,9.66,3325825,total,No handwashing facility,Region 7
+Hygiene,11.72,1619234,rural,No handwashing facility,Region 7
+Hygiene,8.28,1706592,urban,No handwashing facility,Region 7
+Sanitation,17.79,6126340,total,Open defecation,Region 8
+Sanitation,30.76,4250777,rural,Open defecation,Region 8
+Sanitation,9.1,1875563,urban,Open defecation,Region 8
+Drinking water,4.22,1452437,total,Surface water,Region 9
+Drinking water,10.51,1452437,rural,Surface water,Region 9
+Drinking water,0,NA,urban,Surface water,Region 9
+Sanitation,18.76,6459799,total,Safely managed service,Region 10
+Sanitation,20.44,2825133,rural,Safely managed service,Region 10
+Sanitation,17.64,3634665,urban,Safely managed service,Region 10
+Drinking water,42.94,14783610,total,Safely managed service,Region 11
+Drinking water,17.16,2372024,rural,Safely managed service,Region 11
+Drinking water,60.23,12411585,urban,Safely managed service,Region 11
+Sanitation,9.07,3123277,total,Unimproved,Region 12
+Sanitation,14.45,1996823,rural,Unimproved,Region 12
+Sanitation,5.47,1126455,urban,Unimproved,Region 12
+Drinking water,1.38,475575,total,Unimproved,Region 13
+Drinking water,3.44,475576,rural,Unimproved,Region 13
+Drinking water,0,NA,urban,Unimproved,Region 13
